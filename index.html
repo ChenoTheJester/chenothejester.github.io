@@ -1,0 +1,86 @@
+<html>
+  <head>
+    <style>
+    textarea {
+      resize: none;
+    }
+  </style>
+  </head>
+  <body class="container mt-5">
+    <form onsubmit="sendContact(event)">
+      <div class="mb-3">
+        <label for="nameInput" class="form-label">Name:</label><br>
+        <textarea class="form-control" id="nameInput" rows="1"></textarea><br><br>
+      </div>
+      <div class="mb-3">
+        <label for="emailInput" class="form-label">Email:</label><br>
+        <input type="email" class="form-control" id="emailInput"><br><br>
+      </div>
+      <div class="mb-3">
+        <label for="numInput" class="form-label">Phone number:</label><br>
+        <textarea class="form-control" id="numInput" rows="1"></textarea><br><br>
+      </div>
+      <div class="mb-3">
+        <label for="readingInput" class="form-label">Type of reading:</label><br>
+        <select name="reading" id="readingInput">
+          <option value="NA">*chose a reading*</option>
+          <option value="3 card spread">3 card spread</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="cashInput" class="form-label">$Cashtag:</label><br>
+        <textarea class="form-control" id="cashInput" rows="1"></textarea><br><br>
+      </div>
+      <div class="mb-3">
+        <label for="messageInput" class="form-label">Message:</label><br>
+        <textarea class="form-control" id="messageInput" rows="1"></textarea><br><br>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    <script>
+      async function sendContact(ev) {
+        ev.preventDefault();
+
+        const senderName = document.getElementById('nameInput').value;
+        const senderEmail = document.getElementById('emailInput').value;
+        const senderNum = document.getElementById('numInput').value;
+        const senderReading = document.getElementById('readingInput').value;
+        const senderTag = document.getElementById('cashInput').value;
+        const senderMessage = document.getElementById('messageInput').value;
+
+        const webhookBody = {
+          embeds: [
+            {
+              title: 'Contact Form Submitted',
+              fields: [
+                { name: 'Sender', value: senderName },
+                { name: 'Email', value: senderEmail },
+                { name: 'Number', value: senderNum },
+                { name: 'Reading', value: senderReading },
+                { name: 'Cashtag', value: senderTag },
+                { name: 'Message', value: senderMessage },
+              ],
+            },
+          ],
+        };
+
+        const webhookUrl =
+          'https://discord.com/api/webhooks/1237074667882156052/UIiXNXZdYYFfYC-9en6c56VLZFAdYka8WEy8NiG49-Q4RK-ndmrATcDeEjBGFemyxTpe';
+
+        const response = await fetch(webhookUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(webhookBody),
+        });
+
+        if (response.ok) {
+          alert('I have received your message!');
+        } else {
+          alert('There was an error! Try again later!');
+        }
+      }
+    </script>
+  </body>
+</html>
